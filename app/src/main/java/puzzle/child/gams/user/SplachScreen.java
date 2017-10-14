@@ -1,4 +1,4 @@
-package puzzle.child.gams;
+package puzzle.child.gams.user;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import puzzle.child.gams.R;
 
 public class SplachScreen extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 2000;

@@ -1,4 +1,4 @@
-package puzzle.child.gams;
+package puzzle.child.gams.test;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +18,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import puzzle.child.gams.R;
+import puzzle.child.gams.utilitis.Utility;
 
 public class MainActivity extends Activity {
 

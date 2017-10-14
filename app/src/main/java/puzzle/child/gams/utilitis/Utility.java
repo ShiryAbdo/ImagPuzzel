@@ -1,4 +1,4 @@
-package puzzle.child.gams;
+package puzzle.child.gams.utilitis;
 
 import android.Manifest;
 import android.annotation.TargetApi;

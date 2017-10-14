@@ -1,4 +1,4 @@
-package puzzle.child.gams;
+package puzzle.child.gams.test;
 
 /**
  * Created by youssef on 5/7/15.

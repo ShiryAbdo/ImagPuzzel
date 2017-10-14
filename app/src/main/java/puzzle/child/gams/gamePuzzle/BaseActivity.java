@@ -1,4 +1,4 @@
-package puzzle.child.gams;
+package puzzle.child.gams.gamePuzzle;
 
 import android.app.Dialog;
 import android.app.FragmentTransaction;
@@ -8,18 +8,16 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import puzzle.child.gams.user.MenuActivity;
+import puzzle.child.gams.R;
 import puzzle.child.gams.gameMomery.DifficultData;
 import puzzle.child.gams.gameMomery.EasyData;
 import puzzle.child.gams.gameMomery.HardData;

@@ -1,4 +1,4 @@
-package puzzle.child.gams;
+package puzzle.child.gams.test;
 
 /**
  * Created by youssef on 5/7/15.
@@ -10,10 +10,12 @@ import android.graphics.Paint.Style;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import puzzle.child.gams.test.SlidePuzzle;
+import puzzle.child.gams.test.SlidePuzzleMain;
 
 public class SlidePuzzleView extends View {
     public static enum ShowNumbers { NONE, SOME, ALL };

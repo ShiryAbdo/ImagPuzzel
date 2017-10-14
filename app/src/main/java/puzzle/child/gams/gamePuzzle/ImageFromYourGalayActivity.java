@@ -1,26 +1,24 @@
-package puzzle.child.gams;
+package puzzle.child.gams.gamePuzzle;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,23 +27,21 @@ import android.widget.Toast;
 import com.dolby.dap.DolbyAudioProcessing;
 import com.dolby.dap.OnDolbyAudioProcessingEventListener;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
-import puzzle.child.gams.gameMomery.DifficultData;
-import puzzle.child.gams.gameMomery.EasyData;
-import puzzle.child.gams.gameMomery.HardData;
-import puzzle.child.gams.gameMomery.MediumData;
+import puzzle.child.gams.R;
+import puzzle.child.gams.test.SlidePuzzle;
+import puzzle.child.gams.test.SlidePuzzleMain;
+import puzzle.child.gams.test.SlidePuzzleView;
 
-public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionListener,
+import static puzzle.child.gams.R.id.action_refresh;
+import static puzzle.child.gams.R.id.removePhoto;
+import static puzzle.child.gams.R.id.selectImage;
+
+public class ImageFromYourGalayActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener,
         OnDolbyAudioProcessingEventListener {
     protected static final int MENU_SCRAMBLE = 0;
     protected static final int MENU_SELECT_IMAGE = 1;
@@ -59,7 +55,7 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
     protected static final String KEY_PUZZLE = "slidePuzzle";
     protected static final String KEY_PUZZLE_SIZE = "puzzleSize";
 
-    protected static final String FILENAME_DIR = "puzzle.child.gams";
+    protected static final String FILENAME_DIR = "youssef.slidepuzzle";
     protected static final String FILENAME_PHOTO_DIR = FILENAME_DIR + "/photo";
     protected static final String FILENAME_PHOTO = "photo.jpg";
 
@@ -77,20 +73,17 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
     MediaPlayer mPlayer;
     DolbyAudioProcessing mDolbyAudioProcessing;
     private final java.util.List<String> mActList = new java.util.ArrayList<String>();
-    Bundle bundle;
-    String catogery ;
-    int imageSourse ;
-    EasyData easyData ;
-    MediumData mediumData;
-    HardData hardData ;
-    DifficultData difficultData ;
-    ArrayList<Integer> images ;
-    String NN;
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+//        setTitle("Capture your image");
+        setTitle(Html.fromHtml("<small>Galary Image</small>"));
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.llogo);
+
 
 
         bitmapOptions = new BitmapFactory.Options();
@@ -98,8 +91,8 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
 
         slidePuzzle = new SlidePuzzle();
 
-        view = new SlidePuzzleView(getContext(), slidePuzzle);
-
+        view = new SlidePuzzleView(this, slidePuzzle);
+        setContentView(view);
 
         shuffle();
 
@@ -108,10 +101,9 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
             setPuzzleSize(DEFAULT_SIZE, true);
         }
 
-        Uri path = Uri.parse("android.resource://puzzle.child.gams/" + R.drawable.garil);
+//        Uri path = Uri.parse("android.resource://puzzle.child.gams/" + R.drawable.dabdob);
 
-        loadBitmap(path);
-        return  view ;
+//        loadBitmap(path);
     }
 
     private void shuffle() {
@@ -127,7 +119,7 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
 
-            InputStream imageStream = getActivity().getContentResolver().openInputStream(uri);
+            InputStream imageStream = getContentResolver().openInputStream(uri);
             BitmapFactory.decodeStream(imageStream, null, o);
 
             int targetWidth = view.getTargetWidth();
@@ -156,18 +148,18 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
             o.inScaled = false;
             o.inJustDecodeBounds = false;
 
-            imageStream = getActivity().getContentResolver().openInputStream(uri);
+            imageStream = getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream, null, o);
 
             if(bitmap == null)
             {
-                Toast.makeText(getContext(), getString(R.string.error_could_not_load_image), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.error_could_not_load_image), Toast.LENGTH_LONG).show();
                 return;
             }
 
             int rotate = 0;
 
-            Cursor cursor = getActivity().getContentResolver().query(uri, new String[] {MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
+            Cursor cursor = getContentResolver().query(uri, new String[] {MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
 
             if(cursor != null)
             {
@@ -202,7 +194,7 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
         }
         catch(FileNotFoundException ex)
         {
-            Toast.makeText(getContext(), MessageFormat.format(getString(R.string.error_could_not_load_image_error), ex.getMessage()), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, MessageFormat.format(getString(R.string.error_could_not_load_image_error), ex.getMessage()), Toast.LENGTH_LONG).show();
             return;
         }
     }
@@ -213,14 +205,86 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
         view.setBitmap(bitmap);
         setPuzzleSize(Math.min(puzzleWidth, puzzleHeight), true);
 
-//        setRequestedOrientation(portrait ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+//        setRequestedOrientation(portrait ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
+    private void selectImage() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_SELECT_IMAGE);
+    }
 
+    private void takePicture()
+    {
+        File dir = getSaveDirectory();
 
+        if(dir == null)
+        {
+            Toast.makeText(this, getString(R.string.error_could_not_create_directory_to_store_photo), Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        File file = new File(dir, FILENAME_PHOTO);
+        Intent photoPickerIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        startActivityForResult(photoPickerIntent, RESULT_TAKE_PHOTO);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
+    {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
+        switch(requestCode)
+        {
+            case RESULT_SELECT_IMAGE:
+            {
+                if(resultCode == RESULT_OK)
+                {
+                    Uri selectedImage = imageReturnedIntent.getData();
+                    loadBitmap(selectedImage);
+                }
+
+                break;
+            }
+
+            case RESULT_TAKE_PHOTO:
+            {
+                if(resultCode == RESULT_OK)
+                {
+                    File file = new File(getSaveDirectory(), FILENAME_PHOTO);
+
+                    if(file.exists())
+                    {
+                        Uri uri = Uri.fromFile(file);
+
+                        if(uri != null)
+                        {
+                            loadBitmap(uri);
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+    }
+
+    private File getSaveDirectory()
+    {
+        File root = new File(Environment.getExternalStorageDirectory().getPath());
+        File dir = new File(root, FILENAME_PHOTO_DIR);
+
+        if(!dir.exists())
+        {
+            if(!root.exists() || !dir.mkdirs())
+            {
+                return null;
+            }
+        }
+
+        return dir;
+    }
 
     private float getImageAspectRatio()
     {
@@ -268,15 +332,76 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
         }
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
 
+        onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_image, menu);
 
+        return true;
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item)
+    {
+        return onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case action_refresh:
+                shuffle();
+                return true;
+
+            case removePhoto:
+                ((ViewGroup)view.getParent()).removeView(view);
+                return true;
+
+            case selectImage:
+                setContentView(view);
+                selectImage();
+                return true;
+
+            default:
+                setContentView(view);
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     protected SharedPreferences getPreferences()
     {
-        return getActivity().getSharedPreferences(SlidePuzzleMain.class.getName(), Activity.MODE_PRIVATE);
+        return getSharedPreferences(SlidePuzzleMain.class.getName(), Activity.MODE_PRIVATE);
+    }
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+
+        if (mPlayer != null) {
+            mPlayer.pause();
+        }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (mPlayer != null)
+        {
+            mPlayer.start();
+        }
+    }
 
     protected boolean loadPreferences()
     {
@@ -338,19 +463,19 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
     {
         if(mPlayer == null) {
             mPlayer = MediaPlayer.create(
-                    getActivity(),
+                    ImageFromYourGalayActivity.this,
                     R.raw.slide);
             mPlayer.start();
         } else {
             mPlayer.release();
             mPlayer = null;
             mPlayer = MediaPlayer.create(
-                    getActivity(),
+                    ImageFromYourGalayActivity.this,
                     R.raw.slide);
             mPlayer.start();
         }
 
-        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(getContext(), DolbyAudioProcessing.PROFILE.GAME, this);
+        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(this, DolbyAudioProcessing.PROFILE.GAME, this);
         if (mDolbyAudioProcessing == null) {
             return;
         }
@@ -360,22 +485,22 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
     {
         if(mPlayer == null) {
             mPlayer = MediaPlayer.create(
-                    getActivity(),
+                    ImageFromYourGalayActivity.this,
                     R.raw.fireworks);
             mPlayer.start();
         } else {
             mPlayer.release();
             mPlayer = null;
             mPlayer = MediaPlayer.create(
-                    getActivity(),
+                    ImageFromYourGalayActivity.this,
                     R.raw.fireworks);
             mPlayer.start();
         }
 
-        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(getContext(), DolbyAudioProcessing.PROFILE.GAME, this);
+        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(this, DolbyAudioProcessing.PROFILE.GAME, this);
         if (mDolbyAudioProcessing == null) {
-            Toast.makeText(getActivity(),
-                    "Dolby Audio Processing not available on s device.",
+            Toast.makeText(this,
+                    "Dolby Audio Processing not available on this device.",
                     Toast.LENGTH_SHORT).show();
             shuffle();
         }
@@ -407,9 +532,66 @@ public class PuzzleMain extends Fragment implements MediaPlayer.OnCompletionList
     public void onDolbyAudioProcessingProfileSelected(DolbyAudioProcessing.PROFILE profile) {
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
+        Log.d("Dolby processing", "onDestroy()");
 
+        // Release Media Player instance
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+        }
 
+        this.releaseDolbyAudioProcessing();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        restartSession();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("Dolby processing", "The application is in background, supsendSession");
+        //
+        // If audio playback is not required while your application is in the background, restore the Dolby audio processing system
+        // configuration to its original state by suspendSession().
+        // This ensures that the use of the system-wide audio processing is sandboxed to your application.
+        suspendSession();
+    }
+
+    public void releaseDolbyAudioProcessing() {
+        if (mDolbyAudioProcessing != null) {
+            try {
+                mDolbyAudioProcessing.release();
+                mDolbyAudioProcessing = null;
+            } catch (IllegalStateException ex) {
+                handleIllegalStateException(ex);
+            } catch (RuntimeException ex) {
+                handleRuntimeException(ex);
+            }
+        }
+
+    }
+
+    // Backup the system-wide audio effect configuration and restore the application configuration
+    public void restartSession() {
+        if (mDolbyAudioProcessing != null) {
+            try{
+                mDolbyAudioProcessing.restartSession();
+            } catch (IllegalStateException ex) {
+                handleIllegalStateException(ex);
+            } catch (RuntimeException ex) {
+                handleRuntimeException(ex);
+            }
+        }
+    }
 
     // Backup the application Dolby Audio Processing configuration and restore the system-wide configuration
     public void suspendSession() {

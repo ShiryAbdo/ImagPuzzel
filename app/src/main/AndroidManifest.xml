@@ -20,7 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".test.MainActivity">
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -30,29 +30,34 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".SlidePuzzleMain"
+            android:name=".test.SlidePuzzleMain"
             android:label="@string/title_activity_slide_puzzle_main" />
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MenuActivity">
-
-        </activity>
-        <activity android:name=".BaseActivity" />
-        <activity
-            android:name=".YourImageActivity"
-            android:theme="@style/Theme" />
-        <activity
-            android:name=".ImageFromYourGalayActivity"
-            android:theme="@style/Theme" />
-        <activity android:name=".SplachScreen">
+        <activity android:name=".user.MenuActivity" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".gamePuzzle.BaseActivity" />
+        <activity
+            android:name=".gamePuzzle.YourImageActivity"
+            android:theme="@style/Theme" />
+        <activity
+            android:name=".gamePuzzle.ImageFromYourGalayActivity"
+            android:theme="@style/Theme" />
+        <activity android:name=".user.SplachScreen">
+
+        </activity>
+        <activity android:name=".user.LoginActivity" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".user.RegisterAccountActivity" />
+        <activity android:name=".user.UserAcount"></activity>
     </application>
 
 </manifest>
