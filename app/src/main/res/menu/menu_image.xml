@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!--<item android:id="@+id/action_settings"-->
-        <!--android:title="@string/action_settings"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="never" />-->
+    <!--android:title="@string/action_settings"-->
+    <!--android:orderInCategory="100"-->
+    <!--app:showAsAction="never" />-->
     <item android:id="@+id/removePhoto"
         android:title="Remove Image"
         android:icon="@drawable/remove"
@@ -16,9 +16,9 @@
         android:orderInCategory="200"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/get_photo_with_came"
+    <item android:id="@+id/selectImage"
         android:title="action"
-        android:icon="@drawable/camera"
+        android:icon="@drawable/image"
         android:orderInCategory="300"
         app:showAsAction="ifRoom" />
 </menu>

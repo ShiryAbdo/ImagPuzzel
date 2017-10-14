@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    tools:context="puzzle.child.gams.MenuActivity"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/Easy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+ android:textAllCaps="false"
+        android:text="Easy" />
+
+    <Button
+        android:id="@+id/Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="Medium" />
+
+    <Button
+        android:id="@+id/Hard"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hard" />
+
+    <Button
+        android:id="@+id/Difficult"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Difficult" />
+
+    <Button
+        android:id="@+id/yourImage"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Capture your puzzle"
+        />
+
+    <Button
+        android:id="@+id/CaptureYourImage"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your photo puzzle" />
+</LinearLayout>

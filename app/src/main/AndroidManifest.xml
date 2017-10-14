@@ -15,7 +15,7 @@
     <!-- android:xlargeScreens="true" /> -->
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -31,17 +31,28 @@
         </activity>
         <activity
             android:name=".SlidePuzzleMain"
-             android:label="@string/title_activity_slide_puzzle_main">
+            android:label="@string/title_activity_slide_puzzle_main" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MenuActivity">
+
+        </activity>
+        <activity android:name=".BaseActivity" />
+        <activity
+            android:name=".YourImageActivity"
+            android:theme="@style/Theme" />
+        <activity
+            android:name=".ImageFromYourGalayActivity"
+            android:theme="@style/Theme" />
+        <activity android:name=".SplachScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ package puzzle.child.gams;
  */
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class SlidePuzzle {
         {
             if(tiles[i] != i)
             {
-                return false;
+                 return false;
             }
         }
 

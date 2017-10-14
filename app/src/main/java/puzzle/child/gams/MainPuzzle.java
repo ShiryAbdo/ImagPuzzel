@@ -1,15 +1,13 @@
 package puzzle.child.gams;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -17,14 +15,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.v7.view.menu.ActionMenuItem;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.dolby.dap.DolbyAudioProcessing;
 import com.dolby.dap.OnDolbyAudioProcessingEventListener;
 
@@ -44,8 +47,13 @@ import puzzle.child.gams.gameMomery.EasyData;
 import puzzle.child.gams.gameMomery.HardData;
 import puzzle.child.gams.gameMomery.MediumData;
 
-public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.OnCompletionListener,
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class MainPuzzle extends Fragment  implements MediaPlayer.OnCompletionListener,
         OnDolbyAudioProcessingEventListener {
+
     protected static final int MENU_SCRAMBLE = 0;
     protected static final int MENU_SELECT_IMAGE = 1;
     protected static final int MENU_TAKE_PHOTO = 2;
@@ -66,7 +74,7 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
 
     private SlidePuzzleView view;
     private SlidePuzzle slidePuzzle;
-    private Options bitmapOptions;
+    private BitmapFactory.Options bitmapOptions;
     private int puzzleWidth = 1;
     private int puzzleHeight = 1;
     private Uri imageUri;
@@ -85,35 +93,30 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     DifficultData difficultData ;
     ArrayList<Integer> images ;
     String NN;
+    BaseActivity baseActivity ;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        String strtext = getArguments().getString("catogery");
+        int image =getArguments().getInt("image");
+        baseActivity =new BaseActivity();
 
-        bundle=getIntent().getExtras();
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        if(bundle!=null) {
-            catogery= bundle.getString("catogery");
-        }
-
-        Toast.makeText(getApplicationContext(),catogery,Toast.LENGTH_LONG).show();
-
-//        }
         images = new ArrayList<>();
         easyData= new EasyData();
         mediumData= new MediumData();
         hardData=new HardData();
         difficultData= new DifficultData();
 
-        bitmapOptions = new Options();
+        bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inScaled = false;
 
         slidePuzzle = new SlidePuzzle();
 
-        view = new SlidePuzzleView(this, slidePuzzle);
-        setContentView(view);
-        view.setBackgroundColor(Color.WHITE);
+        view = new SlidePuzzleView(getActivity(), slidePuzzle);
 
         shuffle();
 
@@ -121,26 +124,57 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
         {
             setPuzzleSize(DEFAULT_SIZE, true);
         }
-        if(catogery.equals("Easy")){
+
+
+//        Toast.makeText(getActivity(),strtext,Toast.LENGTH_LONG).show();
+
+
+        if(strtext.equals("Easy")){
             images=easyData.getEasyDataArray();
             imageSourse=images.get(0);
-        }if(catogery.equals("Medium")){
+        }if(strtext.equals("Medium")){
             images=mediumData.getMediumData();
             imageSourse=images.get(0);
-        }if(catogery.equals("Hard")){
+        }if(strtext.equals("Hard")){
             images=hardData.getHardData();
             imageSourse=images.get(0);
-        }if(catogery.equals("Difficult")) {
+        }if(strtext.equals("Difficult")) {
             images =difficultData.getDifficultData();
             imageSourse = images.get(0);
         }
 
-
-//        imageSourse ;
-        Uri path = Uri.parse("android.resource://puzzle.child.gams/" +imageSourse);
+        Uri path = Uri.parse("android.resource://puzzle.child.gams/" + image);
 
         loadBitmap(path);
+        boolean solved = slidePuzzle.isSolved();
+        if(solved==true){
+            Toast.makeText(getActivity(), "solved", Toast.LENGTH_LONG).show();
+        }else{
+//            getActivity().findViewById(R.id.next).setVisibility(View.GONE);
+            getActivity().closeOptionsMenu();
+//            getActivity().findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(getActivity(), "you should solve it frist", Toast.LENGTH_LONG).show();
+//                }
+//            });
+
+             Toast.makeText(getActivity(), "not solved", Toast.LENGTH_LONG).show();
+
+        }
+        getActivity().findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shuffle();
+
+            }
+        });
+
+
+        // Inflate the layout for this fragment
+        return view;
     }
+
 
     private void shuffle() {
         slidePuzzle.init(puzzleWidth, puzzleHeight);
@@ -152,10 +186,10 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     protected void loadBitmap(Uri uri) {
         try
         {
-            Options o = new Options();
+            BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
 
-            InputStream imageStream = getContentResolver().openInputStream(uri);
+            InputStream imageStream = getActivity().getContentResolver().openInputStream(uri);
             BitmapFactory.decodeStream(imageStream, null, o);
 
             int targetWidth = view.getTargetWidth();
@@ -184,18 +218,18 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
             o.inScaled = false;
             o.inJustDecodeBounds = false;
 
-            imageStream = getContentResolver().openInputStream(uri);
+            imageStream = getActivity().getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(imageStream, null, o);
 
             if(bitmap == null)
             {
-                Toast.makeText(this, getString(R.string.error_could_not_load_image), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.error_could_not_load_image), Toast.LENGTH_LONG).show();
                 return;
             }
 
             int rotate = 0;
 
-            Cursor cursor = getContentResolver().query(uri, new String[] {MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
+            Cursor cursor = getActivity().getContentResolver().query(uri, new String[] {MediaStore.Images.ImageColumns.ORIENTATION}, null, null, null);
 
             if(cursor != null)
             {
@@ -230,7 +264,7 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
         }
         catch(FileNotFoundException ex)
         {
-            Toast.makeText(this, MessageFormat.format(getString(R.string.error_could_not_load_image_error), ex.getMessage()), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), MessageFormat.format(getString(R.string.error_could_not_load_image_error), ex.getMessage()), Toast.LENGTH_LONG).show();
             return;
         }
     }
@@ -244,145 +278,8 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
 //        setRequestedOrientation(portrait ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
     }
 
-    private void selectImage() {
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, RESULT_SELECT_IMAGE);
-    }
-
-    private void takePicture()
-    {
-//        File dir = getSaveDirectory();
-//
-//        if(dir == null)
-//        {
-//            Toast.makeText(s, getString(R.string.error_could_not_create_directory_to_store_photo), Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-////        File file = new File(dir, FILENAME_PHOTO);
-//        Intent photoPickerIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//
-////        photoPickerIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-//        startActivityForResult(cameraIntent, RESULT_TAKE_PHOTO);
-
-        Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-        File file=getSaveDirectory();
-       Uri picUri = Uri.fromFile(file); // create
-        i.putExtra(MediaStore.EXTRA_OUTPUT,picUri); // set the image file
-
-        startActivityForResult(i, 1889);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent)
-    {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-
-        switch(requestCode)
-        {
-            case RESULT_SELECT_IMAGE:
-            {
-                if(resultCode == RESULT_OK)
-                {
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    loadBitmap(selectedImage);
-                }
-
-                break;
-            }
-
-            case RESULT_TAKE_PHOTO:
-            {
-                onCaptureImageResult(imageReturnedIntent);
-//                if(resultCode == RESULT_OK)
-//                {
-//                    File file = new File(getSaveDirectory(), FILENAME_PHOTO);
-//
-//                    if(file.exists())
-//                    {
-//                        Uri uri = Uri.fromFile(file);
-//
-//                        if(uri != null)
-//                        {
-//                            loadBitmap(uri);
-//                        }
-//                    }
-//                }
-
-                break;
-            }
-        }
-    }
 
 
-    private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-        Uri uri = Uri.fromFile(destination);
-        loadBitmap(uri);
-
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-//        ivImage.setImageBitmap(thumbnail);
-    }
-
-    /** Create a File for saving an image */
-    private  File getOutputMediaFile(int type){
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyApplication");
-
-        /**Create the storage directory if it does not exist*/
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                return null;
-            }
-        }
-
-        /**Create a media file name*/
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == 1){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".png");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-    }
-
-    private File getSaveDirectory()
-    {
-        File root = new File(Environment.getExternalStorageDirectory().getPath());
-        File dir = new File(root, FILENAME_PHOTO_DIR);
-
-        if(!dir.exists())
-        {
-            if(!root.exists() || !dir.mkdirs())
-            {
-                return null;
-            }
-        }
-
-        return root;
-    }
 
     private float getImageAspectRatio()
     {
@@ -430,65 +327,19 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-    {
-        super.onCreateContextMenu(menu, v, menuInfo);
 
-        onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        boolean hasCamera = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
 
-        menu.add(0, MENU_SELECT_IMAGE, 0, R.string.menu_select_image);
 
-        if(hasCamera)
-        {
-            menu.add(0, MENU_TAKE_PHOTO, 0, R.string.menu_take_photo);
-        }
 
-        menu.add(0, MENU_SCRAMBLE, 0, R.string.menu_scramble);
 
-        return true;
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item)
-    {
-        return onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch(item.getItemId())
-        {
-            case MENU_SCRAMBLE:
-                shuffle();
-                return true;
-
-            case MENU_SELECT_IMAGE:
-                selectImage();
-                return true;
-
-            case MENU_TAKE_PHOTO:
-                takePicture();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     protected SharedPreferences getPreferences()
     {
-        return getSharedPreferences(SlidePuzzleMain.class.getName(), Activity.MODE_PRIVATE);
+        return getActivity().getSharedPreferences(SlidePuzzleMain.class.getName(), Activity.MODE_PRIVATE);
     }
     @Override
-    protected void onStop()
+    public void onStop()
     {
         super.onStop();
 
@@ -498,7 +349,7 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 
         if (mPlayer != null)
@@ -567,19 +418,19 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     {
         if(mPlayer == null) {
             mPlayer = MediaPlayer.create(
-                    SlidePuzzleMain.this,
+                    getActivity(),
                     R.raw.slide);
             mPlayer.start();
         } else {
             mPlayer.release();
             mPlayer = null;
             mPlayer = MediaPlayer.create(
-                    SlidePuzzleMain.this,
+                    getActivity(),
                     R.raw.slide);
             mPlayer.start();
         }
 
-        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(this, DolbyAudioProcessing.PROFILE.GAME, this);
+        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(getActivity(), DolbyAudioProcessing.PROFILE.GAME, this);
         if (mDolbyAudioProcessing == null) {
             return;
         }
@@ -589,21 +440,21 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     {
         if(mPlayer == null) {
             mPlayer = MediaPlayer.create(
-                    SlidePuzzleMain.this,
+                    getActivity(),
                     R.raw.fireworks);
             mPlayer.start();
         } else {
             mPlayer.release();
             mPlayer = null;
             mPlayer = MediaPlayer.create(
-                    SlidePuzzleMain.this,
+                    getActivity(),
                     R.raw.fireworks);
             mPlayer.start();
         }
 
-        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(this, DolbyAudioProcessing.PROFILE.GAME, this);
+        mDolbyAudioProcessing = DolbyAudioProcessing.getDolbyAudioProcessing(getActivity(), DolbyAudioProcessing.PROFILE.GAME, this);
         if (mDolbyAudioProcessing == null) {
-            Toast.makeText(this,
+            Toast.makeText(getActivity(),
                     "Dolby Audio Processing not available on s device.",
                     Toast.LENGTH_SHORT).show();
             shuffle();
@@ -637,7 +488,7 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
 
         Log.d("Dolby processing", "onDestroy()");
@@ -653,14 +504,14 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         restartSession();
 
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         Log.d("Dolby processing", "The application is in background, supsendSession");
         //
@@ -736,5 +587,6 @@ public class SlidePuzzleMain extends AppCompatActivity implements MediaPlayer.On
     {
         Log.e("Dolby processing", Log.getStackTraceString(ex));
     }
+
 
 }

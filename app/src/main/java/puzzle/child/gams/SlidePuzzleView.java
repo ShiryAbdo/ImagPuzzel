@@ -3,12 +3,14 @@ package puzzle.child.gams;
 /**
  * Created by youssef on 5/7/15.
  */
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.Paint.Style;
 import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -88,6 +90,7 @@ public class SlidePuzzleView extends View {
     }
 
     private void refreshDimensions() {
+
         targetWidth = canvasWidth;
         targetHeight = canvasHeight;
 
@@ -126,6 +129,7 @@ public class SlidePuzzleView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+
         if(slidePuzzle == null || bitmap == null)
         {
             return;
@@ -133,10 +137,17 @@ public class SlidePuzzleView extends View {
 
         if(puzzleWidth != slidePuzzle.getWidth() || puzzleHeight != slidePuzzle.getHeight())
         {
+
             refreshDimensions();
         }
 
         boolean solved = slidePuzzle.isSolved();
+//        if(solved==true){
+//            Toast.makeText(getContext(), "solved", Toast.LENGTH_LONG).show();
+//        }else{
+//            Toast.makeText(getContext(), "not solved", Toast.LENGTH_LONG).show();
+//
+//        }
         canvas.drawColor(solved ? COLOR_SOLVED : COLOR_ACTIVE);
 
         int[] originalTiles = slidePuzzle.getTiles();
@@ -367,8 +378,8 @@ public class SlidePuzzleView extends View {
     }
 
     private void playSlide() {
-        SlidePuzzleMain activity = (SlidePuzzleMain) getContext();
-        activity.playSound();
+        Activity activity = (Activity) getContext();
+//        activity.playSound();
     }
 
     private boolean startDrag(MotionEvent event) {
