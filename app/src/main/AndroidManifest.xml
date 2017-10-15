@@ -22,22 +22,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".test.MainActivity">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".test.SlidePuzzleMain"
             android:label="@string/title_activity_slide_puzzle_main" />
-        <activity android:name=".user.MenuActivity" >
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".test.MenuActivity">
 
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".gamePuzzle.BaseActivity" />
         <activity
@@ -47,17 +38,27 @@
             android:name=".gamePuzzle.ImageFromYourGalayActivity"
             android:theme="@style/Theme" />
         <activity android:name=".user.SplachScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".user.LoginActivity" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".user.LoginActivity">
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+
         </activity>
         <activity android:name=".user.RegisterAccountActivity" />
-        <activity android:name=".user.UserAcount"></activity>
+        <activity android:name=".user.UserAcount" />
+        <activity android:name=".ui.CircleMenuActivity"></activity>
+        <activity android:name=".ui.CircleActivity"></activity>
+        <activity
+            android:name=".ui.MainCircleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme">
+
+        </activity>
+        <activity android:name=".user.MenuHisImage"></activity>
     </application>
 
 </manifest>

@@ -161,12 +161,12 @@ public class MainPuzzle extends Fragment  implements MediaPlayer.OnCompletionLis
             dialog.show();
         }else{
 //
-            getActivity().findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getActivity(), "you should solve it frist", Toast.LENGTH_LONG).show();
-                }
-            });
+//            getActivity().findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(getActivity(), "you should solve it frist", Toast.LENGTH_LONG).show();
+//                }
+//            });
 
 
         }

@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import puzzle.child.gams.R;
+import puzzle.child.gams.test.MenuActivity;
+import puzzle.child.gams.ui.MainCircleActivity;
 
 public class SplachScreen extends AppCompatActivity {
     private static int SPLASH_TIME_OUT = 2000;
@@ -21,7 +23,7 @@ public class SplachScreen extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(SplachScreen.this,  MenuActivity.class);
+                Intent i = new Intent(SplachScreen.this,  MainCircleActivity.class);
                 startActivity(i);
 
                 // close this activity
@@ -42,7 +44,7 @@ public class SplachScreen extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(SplachScreen.this,  MenuActivity.class);
+                Intent i = new Intent(SplachScreen.this,  MainCircleActivity.class);
                 startActivity(i);
 
                 // close this activity

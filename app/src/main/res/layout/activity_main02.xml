@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/ppp"
+     android:layout_height="match_parent"
+     android:orientation="vertical" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar1"
+        android:layout_width="fill_parent"
+        android:layout_height="58dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:titleTextColor="#ffffff">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:gravity="end"
+            android:layout_gravity="end"
+            android:layout_height="wrap_content">
+            <!--<ImageView-->
+                <!--android:gravity="end"-->
+                <!--android:id="@+id/refresh"-->
+                <!--android:padding="@dimen/_5sdp"-->
+                <!--android:layout_width="@dimen/_25sdp"-->
+                <!--android:layout_height="@dimen/_25sdp"-->
+                <!--android:src="@drawable/refresh"/>-->
+
+            <!--<ImageView-->
+                <!--android:gravity="end"-->
+                <!--android:padding="@dimen/_5sdp"-->
+                <!--android:id="@+id/next"-->
+                <!--android:layout_width="@dimen/_30sdp"-->
+                <!--android:layout_height="@dimen/_30sdp"-->
+                <!--android:src="@drawable/next"/>-->
+
+        </LinearLayout>
+
+
+
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#b7b6b6"
+android:gravity="center"
+        android:alpha="0.8"
+
+        android:layout_height="match_parent">
+        <puzzle.child.gams.ui.CircleMenuLayout
+            android:layout_marginTop="@dimen/_30sdp"
+            android:id="@+id/id_menulayout"
+            android:layout_width="@dimen/_300sdp"
+            android:layout_height="@dimen/_300sdp"
+             android:background="@drawable/circle_bg3" >
+
+            <RelativeLayout
+                android:id="@id/id_circle_menu_item_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/logo" />
+
+                <ImageView
+                    android:layout_width="116.0dip"
+                    android:layout_height="116.0dip"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/turnplate_mask_unlogin_normal" />
+            </RelativeLayout>
+        </puzzle.child.gams.ui.CircleMenuLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -16,7 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
-import puzzle.child.gams.user.MenuActivity;
+import puzzle.child.gams.ui.MainCircleActivity;
+import puzzle.child.gams.test.MenuActivity;
 import puzzle.child.gams.R;
 import puzzle.child.gams.gameMomery.DifficultData;
 import puzzle.child.gams.gameMomery.EasyData;
@@ -165,7 +166,7 @@ public class BaseActivity extends AppCompatActivity {
                     dialogButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(),MenuActivity.class);
+                            Intent intent = new Intent(getApplicationContext(),MainCircleActivity.class);
                             startActivity(intent);
                         }
                     });
@@ -275,7 +276,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(BaseActivity.this,   MenuActivity.class);
+        Intent intent = new Intent(BaseActivity.this,   MainCircleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();

@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="puzzle.child.gams.user.RegisterAccountActivity"
-    android:background="@drawable/login_bg">
+    android:background="@drawable/ppp"
+    tools:context="puzzle.child.gams.user.RegisterAccountActivity">
 
     <View
         android:id="@+id/title"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp"
-    tools:context="puzzle.child.gams.user.MenuActivity"
+    tools:context="puzzle.child.gams.test.MenuActivity"
     android:orientation="vertical">
 
     <Button
@@ -56,8 +56,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="User Acount" />
-    <com.hitomi.cmlibrary.CircleMenu
-        android:id="@+id/circle_menu"
+
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:bmb_buttonEnum="ham"
+        app:bmb_piecePlaceEnum="piecePlace_ham_4"
+        app:bmb_buttonPlaceEnum="buttonPlace_ham_4"
+        />
 </LinearLayout>

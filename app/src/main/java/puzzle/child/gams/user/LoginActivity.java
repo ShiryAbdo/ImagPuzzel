@@ -1,7 +1,9 @@
 package puzzle.child.gams.user;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,22 +18,37 @@ import android.widget.Toast;
 
 import puzzle.child.gams.R;
 import puzzle.child.gams.dataBase.SQLiteDBHelper;
+ import puzzle.child.gams.ui.MainCircleActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
     SQLiteOpenHelper dbhelper;
     SQLiteDatabase db;
     Cursor cursor;
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
         //To hide AppBar for fullscreen.
 //        ActionBar ab = getSupportActionBar();
 //        ab.hide();
 
+
+        sharedPref = getApplicationContext().getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
+        String emailShared = sharedPref.getString("email", "null");
+        String fname = sharedPref.getString("fname", "null");
+
+        if (!emailShared.equals("null")&&!fname.equals("null")){
+            Intent intent = new Intent(this, MainCircleActivity.class);
+            startActivity(intent);
+
+        }
         //Referencing UserEmail, Password EditText and TextView for SignUp Now
         final EditText _txtemail = (EditText) findViewById(R.id.txtemail);
         final EditText _txtpass = (EditText) findViewById(R.id.txtpass);
@@ -57,8 +74,12 @@ public class LoginActivity extends AppCompatActivity {
                         //Retrieving User FullName and Email after successfull login and passing to LoginSucessActivity
                         String _fname = cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_FULLNAME));
                         String _email= cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_EMAIL));
+                        editor.putString("fname", _fname);
+                        editor.putString("email", _email);
+                        editor.commit();
+
                         Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(LoginActivity.this,MenuActivity.class);
+                        Intent intent = new Intent(LoginActivity.this,MainCircleActivity.class);
                         intent.putExtra("fullname",_fname);
                         intent.putExtra("email",_email);
                         startActivity(intent);

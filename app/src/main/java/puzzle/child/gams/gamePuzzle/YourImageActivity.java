@@ -60,11 +60,11 @@ public class YourImageActivity extends AppCompatActivity implements MediaPlayer.
     protected static final String KEY_PUZZLE = "slidePuzzle";
     protected static final String KEY_PUZZLE_SIZE = "puzzleSize";
 
-    protected static final String FILENAME_DIR = "youssef.slidepuzzle";
+    protected static final String FILENAME_DIR = "puzzle.child.gams";
     protected static final String FILENAME_PHOTO_DIR = FILENAME_DIR + "/photo";
     protected static final String FILENAME_PHOTO = "photo.jpg";
 
-    protected static final int DEFAULT_SIZE = 3;
+    protected static int DEFAULT_SIZE ;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
 
     private SlidePuzzleView view;
@@ -75,6 +75,8 @@ public class YourImageActivity extends AppCompatActivity implements MediaPlayer.
     private Uri imageUri;
     private boolean portrait;
     private boolean expert;
+    Bundle bundle ;
+    int size ;
 
     MediaPlayer mPlayer;
     DolbyAudioProcessing mDolbyAudioProcessing;
@@ -89,6 +91,12 @@ public class YourImageActivity extends AppCompatActivity implements MediaPlayer.
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.llogo);
+        bundle=getIntent().getExtras();
+
+        if(bundle!=null) {
+            size=bundle.getInt("DEFAULT_SIZE");
+         }
+        DEFAULT_SIZE=size;
 
 
 

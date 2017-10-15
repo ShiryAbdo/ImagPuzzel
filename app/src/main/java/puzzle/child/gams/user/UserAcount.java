@@ -1,7 +1,9 @@
 package puzzle.child.gams.user;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -13,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.FileNotFoundException;
 
 import puzzle.child.gams.test.MainActivity;
@@ -22,14 +26,22 @@ public class UserAcount extends AppCompatActivity {
 
     private static final int SELECT_PHOTO = 100;
     ImageView dpImage;
-    @Override
+    SharedPreferences sharedPref;
+     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_acount);
 
-//        //To hide AppBar for fullscreen.
-//        ActionBar ab = getSupportActionBar();
-//        ab.hide();
+ sharedPref = getApplicationContext().getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+
+        String loginEmail = sharedPref.getString("email", "null");
+        String loginName = sharedPref.getString("fname", "null");
+         String imagepath =sharedPref.getString("imagepath","null");
+//         if(!imagepath.equals("null")){
+//             Uri imageUri = Uri.parse(imagepath);
+//             Picasso.with(this).load(imageUri).error(android.R.drawable.stat_notify_error).fit().into(dpImage);
+//
+//         }
 
         TextView txtname = (TextView) findViewById(R.id.txt_success_name);
         TextView txtemail = (TextView) findViewById(R.id.txt_success_email);
@@ -38,9 +50,7 @@ public class UserAcount extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        String loginName = intent.getStringExtra("fullname");
-        String loginEmail = intent.getStringExtra("email");
-        txtname.setText("Welcome, " +loginName);
+         txtname.setText("Welcome, " +loginName);
         txtemail.setText(loginEmail);
 
         _btnlogout.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +107,10 @@ public class UserAcount extends AppCompatActivity {
             case SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = imageReturnedIntent.getData();
+                    SharedPreferences.Editor edit=sharedPref.edit();
+                    edit.putString("imagepath",selectedImage.toString());
+                    edit.commit();
+
 
                     Bitmap yourSelectedImage = null;
                     try {
